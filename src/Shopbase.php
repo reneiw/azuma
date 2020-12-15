@@ -21,5 +21,4 @@ class Shopbase extends API implements BasicAuthInterface, OAuthInterface, Verifi
     {
         parent::__construct($data);
     }
-
 }

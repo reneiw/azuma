@@ -37,5 +37,4 @@ trait OAuthTrait
         $this->getOptions()['headers'] = array_replace($this->getOptions()['headers'], [$this->getAccessTokenKey() => $this->getAccessTokenValue()]);
         return $this;
     }
-
 }
