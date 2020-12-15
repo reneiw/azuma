@@ -2,7 +2,7 @@
 $header = <<<EOF
 This file is part of the reneiw/azuma.
 
-(c) CHEN ZHEYU <sturm>
+(c) Reneiw <reneiw@outlook.in>
 
 This source file is subject to the MIT license that is bundled.
 EOF;

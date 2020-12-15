@@ -1,4 +1,19 @@
 {
+    "name": "reneiw\/azuma",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Reneiw",
+            "email": "reneiw@outlook.in",
+            "homepage": "https://github.com/reneiw/auzma",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "ext-json": "*",
+        "reneiw/hiei": "*"
+    },
     "autoload": {
         "psr-4": {
             "Reneiw\\Azuma\\": "src"
