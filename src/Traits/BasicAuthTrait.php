@@ -12,7 +12,7 @@ trait BasicAuthTrait
         return $this->username;
     }
 
-    public function setUsername(string $username): BasicAuthTrait
+    public function setUsername(string $username): self
     {
         $this->username = $username;
         return $this;
@@ -24,7 +24,7 @@ trait BasicAuthTrait
     }
 
 
-    public function setPassword(string $password): BasicAuthTrait
+    public function setPassword(string $password): self
     {
         $this->password = $password;
         return $this;
@@ -32,7 +32,7 @@ trait BasicAuthTrait
 
     public function useBasicAuth(): BasicAuthTrait
     {
-        $this->options['auth'] = [$this->getUsername(), $this->getPassword()];
+        $this->getOptions()['auth'] = [$this->getUsername(), $this->getPassword()];
         return $this;
     }
 }

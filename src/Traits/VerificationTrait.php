@@ -35,10 +35,10 @@ trait VerificationTrait
 
             // Encode and hash the params (without HMAC), add the API secret, and compare to the HMAC from params
             return $hmac === hash_hmac(
-                'sha256',
-                urldecode(http_build_query($params)),
-                $this->getAPISecretKey()
-            );
+                    'sha256',
+                    urldecode(http_build_query($params)),
+                    $this->getAPISecretKey()
+                );
         }
 
         // Not valid
@@ -116,7 +116,7 @@ trait VerificationTrait
             );
     }
 
-    public function setAPIKey(string $key): VerificationTrait
+    public function setAPIKey(string $key): self
     {
         $this->apiKey = $key;
         return $this;
@@ -127,7 +127,7 @@ trait VerificationTrait
         return $this->apiKey;
     }
 
-    public function setAPISecretKey(string $key): VerificationTrait
+    public function setAPISecretKey(string $key): self
     {
         $this->apiSecretKey = $key;
         return $this;
