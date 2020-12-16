@@ -15,6 +15,7 @@ trait BasicAuthTrait
     public function setUsername(string $username): self
     {
         $this->username = $username;
+        $this->useBasicAuth();
         return $this;
     }
 
@@ -27,6 +28,7 @@ trait BasicAuthTrait
     public function setPassword(string $password): self
     {
         $this->password = $password;
+        $this->useBasicAuth();
         return $this;
     }
 
