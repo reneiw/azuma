@@ -8,8 +8,8 @@ use Reneiw\Azuma\Exceptions\ClientException;
 
 trait VerificationTrait
 {
-    private ?string $apiKey;
-    private ?string $apiSecretKey;
+    private ?string $apiKey = null;
+    private ?string $apiSecretKey = null;
 
     /**
      * @param  array  $params

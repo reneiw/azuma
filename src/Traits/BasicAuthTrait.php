@@ -4,8 +4,8 @@ namespace Reneiw\Azuma\Traits;
 
 trait BasicAuthTrait
 {
-    protected ?string $username;
-    protected ?string $password;
+    protected ?string $username = null;
+    protected ?string $password = null;
 
     protected function getUsername(): ?string
     {

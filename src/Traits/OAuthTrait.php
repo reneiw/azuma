@@ -4,8 +4,8 @@ namespace Reneiw\Azuma\Traits;
 
 trait OAuthTrait
 {
-    protected ?string $accessTokenKey;
-    protected ?string $accessTokenValue;
+    protected ?string $accessTokenKey = null;
+    protected ?string $accessTokenValue = null;
 
     public function getAccessTokenKey(): ?string
     {
