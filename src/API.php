@@ -13,9 +13,9 @@ use Reneiw\Hiei\Middleware\UserAgentGenerator;
 
 abstract class API
 {
-    protected ?ClientInterface $client;
-    protected ?HTTPService $APIServer;
-    protected ?string $host;
+    protected ?ClientInterface $client = null;
+    protected ?HTTPService $APIServer = null;
+    protected ?string $host = null;
     protected array $defaultOptions = [
         'timeout' => 60,
         'connect_timeout' => 60,
@@ -85,20 +85,20 @@ abstract class API
         return $this->defaultOptions['handler'];
     }
 
-    public function setAPIServer(HTTPService $APIService): API
+    public function setAPIServer(HTTPService $APIService): self
     {
         $this->APIServer = $APIService;
         return $this;
     }
 
     /** @noinspection PhpUnused */
-    public function setAPIServerOptions(array $options): API
+    public function setAPIServerOptions(array $options): self
     {
         $this->apiDefaultOptions = array_replace($this->apiDefaultOptions, $options);
         return $this;
     }
 
-    public function setClient(ClientInterface $client): API
+    public function setClient(ClientInterface $client): self
     {
         $this->client = $client;
         return $this;
@@ -109,13 +109,13 @@ abstract class API
         $this->setOptions(['handler' => $stack]);
     }
 
-    public function setOptions(array $data): API
+    public function setOptions(array $data): self
     {
         $this->defaultOptions = array_replace($this->defaultOptions, $data);
         return $this;
     }
 
-    public function setHost(string $host): API
+    public function setHost(string $host): self
     {
         $this->host = $host;
         $this->defaultOptions = array_replace($this->defaultOptions, ['base_uri' => "https://{$this->getHost()}"]);
