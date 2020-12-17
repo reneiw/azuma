@@ -5,11 +5,8 @@ namespace Reneiw\Azuma;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
-use Reneiw\Azuma\Exceptions\ClientException;
 use Reneiw\Hiei\HieiMiddleware;
 use Reneiw\Hiei\HTTPService;
-use Reneiw\Hiei\Middleware\ProxyGenerator;
-use Reneiw\Hiei\Middleware\UserAgentGenerator;
 
 abstract class API
 {
@@ -21,7 +18,7 @@ abstract class API
         'connect_timeout' => 60,
         'read_timeout' => 60,
         'handler' => null,
-        'headers' => []
+        'headers' => [],
     ];
 
     protected array $apiDefaultOptions = [];
@@ -34,13 +31,26 @@ abstract class API
      */
     public function __construct(array $data)
     {
+        if($data['host']){
+            $this->setHost($data['host']);
+        }
+        $stack = HandlerStack::create();
+        $stack->push(
+            HieiMiddleware::factory(
+                [
+                    'max_retry_attempts' => 3,
+                    'retry_on_status' => [429],
+                ]
+            )
+        );
+        $this->setHandler($stack);
+        $client = new Client($this->getOptions());
+        $this->setClient($client);
+        $this->setAPIServer(new HTTPService($this->getClient(), $this->getAPIServerOptions()));
     }
 
     public function getAPIServer(): ?HTTPService
     {
-        if (!$this->getAPIServer()) {
-            $this->setAPIServer(new HTTPService($this->getClient(), $this->getAPIServerOptions()));
-        }
         return $this->APIServer;
     }
 
@@ -51,22 +61,6 @@ abstract class API
 
     public function getClient(): ?ClientInterface
     {
-        if (!$this->getClient()) {
-            if (!$this->getHandler()) {
-                $stack = HandlerStack::create();
-                $stack->push(
-                    HieiMiddleware::factory(
-                        [
-                            'max_retry_attempts' => 3,
-                            'retry_on_status' => [429],
-                        ]
-                    )
-                );
-                $this->setHandler($stack);
-            }
-            $client = new Client($this->getOptions());
-            $this->setClient($client);
-        }
         return $this->client;
     }
 
@@ -80,6 +74,7 @@ abstract class API
         return $this->defaultOptions;
     }
 
+    /** @noinspection PhpUnused */
     public function getHandler(): ?HandlerStack
     {
         return $this->defaultOptions['handler'];
@@ -111,7 +106,7 @@ abstract class API
 
     public function setOptions(array $data): self
     {
-        $this->defaultOptions = array_replace($this->defaultOptions, $data);
+        $this->defaultOptions = array_replace_recursive($this->defaultOptions, $data);
         return $this;
     }
 

@@ -36,7 +36,7 @@ trait OAuthTrait
 
     public function useOAuth(): self
     {
-        $this->getOptions()['headers'] = array_replace($this->getOptions()['headers'], [$this->getAccessTokenKey() => $this->getAccessTokenValue()]);
+        $this->setOptions(['headers' => [$this->getAccessTokenKey() => $this->getAccessTokenValue()]]);
         return $this;
     }
 }
