@@ -32,8 +32,14 @@ trait BasicAuthTrait
         return $this;
     }
 
-    public function useBasicAuth(): BasicAuthTrait
+    public function useBasicAuth(array $data = []): self
     {
+        if (!empty($data['username'])) {
+            $this->setUsername($data['username']);
+        }
+        if (!empty($data['password'])) {
+            $this->setPassword($data['password']);
+        }
         $this->getOptions()['auth'] = [$this->getUsername(), $this->getPassword()];
         return $this;
     }

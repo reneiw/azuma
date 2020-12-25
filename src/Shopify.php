@@ -2,14 +2,11 @@
 
 namespace Reneiw\Azuma;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
 use Reneiw\Azuma\Contracts\BasicAuthInterface;
 use Reneiw\Azuma\Contracts\OAuthInterface;
 use Reneiw\Azuma\Traits\BasicAuthTrait;
 use Reneiw\Azuma\Traits\OAuthTrait;
 use Reneiw\Azuma\Traits\VerificationTrait;
-use Reneiw\Hiei\HTTPService;
 
 class Shopify extends API implements BasicAuthInterface, OAuthInterface
 {
@@ -26,13 +23,10 @@ class Shopify extends API implements BasicAuthInterface, OAuthInterface
     {
         switch (true) {
             case !empty($data['token']):
-                $this->setAccessTokenKey(self::HEADER_ACCESS_TOKEN);
-                $this->setAccessTokenValue($data['token']);
-                $this->useOAuth();
+                $this->useOAuth($data);
                 break;
             case (!empty($data['username']) && !empty($data['password'])):
-                $this->setUsername($data['username']);
-                $this->setPassword($data['password']);
+
                 $this->useBasicAuth();
                 break;
             default:

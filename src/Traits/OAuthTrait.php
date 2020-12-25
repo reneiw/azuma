@@ -34,8 +34,10 @@ trait OAuthTrait
         return $this;
     }
 
-    public function useOAuth(): self
+    public function useOAuth(array $data = []): self
     {
+        $this->setAccessTokenKey($data['header'] ?? self::HEADER_ACCESS_TOKEN);
+        $this->setAccessTokenValue($data['token']);
         $this->setOptions(['headers' => [$this->getAccessTokenKey() => $this->getAccessTokenValue()]]);
         return $this;
     }

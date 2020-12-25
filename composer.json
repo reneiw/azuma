@@ -12,7 +12,7 @@
     "require": {
         "php": "^7.4",
         "ext-json": "*",
-        "reneiw/hiei": "*"
+        "reneiw/hiei": "^1.0"
     },
     "autoload": {
         "psr-4": {
