@@ -31,7 +31,7 @@ abstract class API
      */
     public function __construct(array $data)
     {
-        if($data['host']){
+        if ($data['host']) {
             $this->setHost($data['host']);
         }
         $stack = HandlerStack::create();
