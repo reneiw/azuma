@@ -26,8 +26,7 @@ class Shopify extends API implements BasicAuthInterface, OAuthInterface
                 $this->useOAuth($data);
                 break;
             case (!empty($data['username']) && !empty($data['password'])):
-
-                $this->useBasicAuth();
+                $this->useBasicAuth($data);
                 break;
             default:
                 break;

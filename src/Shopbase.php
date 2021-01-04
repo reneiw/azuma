@@ -19,6 +19,16 @@ class Shopbase extends API implements BasicAuthInterface, OAuthInterface, Verifi
 
     public function __construct(array $data = [])
     {
+        switch (true) {
+            case !empty($data['token']):
+                $this->useOAuth($data);
+                break;
+            case (!empty($data['username']) && !empty($data['password'])):
+                $this->useBasicAuth($data);
+                break;
+            default:
+                break;
+        }
         parent::__construct($data);
     }
 }
