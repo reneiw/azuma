@@ -5,6 +5,7 @@ namespace Reneiw\Azuma;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
+use Reneiw\Azuma\Exceptions\ClientException;
 use Reneiw\Hiei\HieiMiddleware;
 use Reneiw\Hiei\HTTPService;
 
@@ -13,7 +14,7 @@ abstract class API
     protected ?ClientInterface $client = null;
     protected ?HTTPService $APIServer = null;
     protected ?string $host = null;
-    protected array $defaultOptions = [
+    public const DEFAULT_OPTIONS = [
         'timeout' => 60,
         'connect_timeout' => 60,
         'read_timeout' => 60,
@@ -21,19 +22,24 @@ abstract class API
         'headers' => [],
     ];
 
-    protected array $apiDefaultOptions = [];
+    protected array $apiOptions = [];
+    protected array $httpServiceOptions = [];
 
     /**
      * API constructor.
      *
      * @param  array  $data
      *
+     * @throws ClientException
      */
     public function __construct(array $data)
     {
-        if ($data['host']) {
-            $this->setHost($data['host']);
+        $this->setOptions(self::DEFAULT_OPTIONS);
+
+        if (empty($data['host'])) {
+            throw new ClientException('client host is empty.');
         }
+        $this->setHost($data['host']);
         $stack = HandlerStack::create();
         $stack->push(
             HieiMiddleware::factory(
@@ -46,7 +52,7 @@ abstract class API
         $this->setHandler($stack);
         $client = new Client($this->getOptions());
         $this->setClient($client);
-        $this->setAPIServer(new HTTPService($this->getClient(), $this->getAPIServerOptions()));
+        $this->setAPIServer(new HTTPService($this->getClient(), $this->getHttpServiceOptions()));
     }
 
     public function getAPIServer(): ?HTTPService
@@ -56,7 +62,7 @@ abstract class API
 
     public function getAPIServerOptions(): array
     {
-        return $this->apiDefaultOptions;
+        return $this->apiOptions;
     }
 
     public function getClient(): ?ClientInterface
@@ -71,13 +77,18 @@ abstract class API
 
     public function getOptions(): array
     {
-        return $this->defaultOptions;
+        return $this->apiOptions;
     }
 
     /** @noinspection PhpUnused */
     public function getHandler(): ?HandlerStack
     {
-        return $this->defaultOptions['handler'];
+        return $this->apiOptions['handler'];
+    }
+
+    public function getHttpServiceOptions(): array
+    {
+        return $this->httpServiceOptions;
     }
 
     public function setAPIServer(HTTPService $APIService): self
@@ -89,7 +100,7 @@ abstract class API
     /** @noinspection PhpUnused */
     public function setAPIServerOptions(array $options): self
     {
-        $this->apiDefaultOptions = array_replace($this->apiDefaultOptions, $options);
+        $this->apiOptions = array_replace_recursive($this->apiOptions, $options);
         return $this;
     }
 
@@ -106,14 +117,20 @@ abstract class API
 
     public function setOptions(array $data): self
     {
-        $this->defaultOptions = array_replace_recursive($this->defaultOptions, $data);
+        $this->apiOptions = array_replace_recursive($this->apiOptions, $data);
         return $this;
     }
 
     public function setHost(string $host): self
     {
         $this->host = $host;
-        $this->defaultOptions = array_replace($this->defaultOptions, ['base_uri' => "https://{$this->getHost()}"]);
+        $this->apiOptions = array_replace_recursive($this->apiOptions, ['base_uri' => "https://{$this->getHost()}"]);
+        return $this;
+    }
+
+    public function setHttpServiceOptions(array $data): self
+    {
+        $this->httpServiceOptions = array_replace_recursive($this->httpServiceOptions, $data);
         return $this;
     }
 
