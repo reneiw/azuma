@@ -52,17 +52,17 @@ abstract class API
         $this->setHandler($stack);
         $client = new Client($this->getOptions());
         $this->setClient($client);
+
+        if ($data['httpServiceOptions'] ?? false) {
+            $this->setHttpServiceOptions($data['httpServiceOptions']);
+        }
+
         $this->setAPIServer(new HTTPService($this->getClient(), $this->getHttpServiceOptions()));
     }
 
     public function getAPIServer(): ?HTTPService
     {
         return $this->APIServer;
-    }
-
-    public function getAPIServerOptions(): array
-    {
-        return $this->apiOptions;
     }
 
     public function getClient(): ?ClientInterface
