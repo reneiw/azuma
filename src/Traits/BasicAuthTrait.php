@@ -40,7 +40,14 @@ trait BasicAuthTrait
         if (!empty($data['password'])) {
             $this->setPassword($data['password']);
         }
-        $this->getOptions()['auth'] = [$this->getUsername(), $this->getPassword()];
+        $this->setOptions(
+            [
+                'auth' => [
+                    $this->getUsername(),
+                    $this->getPassword(),
+                ],
+            ]
+        );
         return $this;
     }
 }
