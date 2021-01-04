@@ -2,19 +2,20 @@
 
 namespace Reneiw\Azuma;
 
-use Reneiw\Azuma\Traits\OAuthTrait;
+use Reneiw\Azuma\Contracts\BearerTokenInterface;
+use Reneiw\Azuma\Traits\BearerTokenTrait;
 
-class WShop extends API
+class WShop extends API implements BearerTokenInterface
 {
-    use OAuthTrait;
+    use BearerTokenTrait;
 
     public const HEADER_ACCESS_TOKEN = 'Authorization';
 
     public function __construct(array $data = [])
     {
         switch (true) {
-            case !empty($data['token']):
-                $this->useOAuth($data);
+            case !empty($data['bearerToken']):
+                $this->useBearerToken($data);
                 break;
             default:
                 break;
