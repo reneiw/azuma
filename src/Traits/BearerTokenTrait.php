@@ -15,7 +15,7 @@ trait BearerTokenTrait
     public function setBearerToken(string $token): self
     {
         if (!substr($token, 0, 7) === 'Bearer ') {
-            $token = 'Bearer '.$token;
+            $token = 'Bearer ' . $token;
         }
         $this->bearerToken = $token;
         return $this;
