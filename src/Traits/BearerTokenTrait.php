@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Reneiw\Azuma\Traits;
 
 trait BearerTokenTrait
