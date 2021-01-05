@@ -19,7 +19,7 @@ abstract class API
         'connect_timeout' => 60,
         'read_timeout' => 60,
         'handler' => null,
-        //'headers' => [],
+        'headers' => [],
     ];
 
     protected array $apiOptions = [];
