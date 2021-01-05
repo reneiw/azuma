@@ -74,7 +74,7 @@ trait VerificationTrait
         );
 
         if ($response['errors']) {
-            throw new AuthenticationException('Failed to get access token.');
+            throw new AuthenticationException('Failed to get access token.MESSAGE=' . ($response['body'] ?? ''));
         } else {
             return $response['body'];
         }
