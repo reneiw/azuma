@@ -35,10 +35,10 @@ trait VerificationTrait
 
             // Encode and hash the params (without HMAC), add the API secret, and compare to the HMAC from params
             return $hmac === hash_hmac(
-                'sha256',
-                urldecode(http_build_query($params)),
-                $this->getAPISecretKey()
-            );
+                    'sha256',
+                    urldecode(http_build_query($params)),
+                    $this->getAPISecretKey()
+                );
         }
 
         // Not valid
@@ -47,13 +47,12 @@ trait VerificationTrait
 
     /**
      * @param  string  $code
-     * @param  string  $key
      *
      * @return array
      * @throws AuthenticationException
      * @throws ClientException
      */
-    public function requestAccess(string $code, string $key = 'access_token'): array
+    public function requestAccess(string $code): array
     {
         if ($this->getApiSecretKey() === null || $this->getApiKey() === null) {
             // Key and secret required
@@ -77,7 +76,7 @@ trait VerificationTrait
         if ($response['errors']) {
             throw new AuthenticationException('Failed to get access token.');
         } else {
-            return $response['body'][$key];
+            return $response['body'];
         }
     }
 
