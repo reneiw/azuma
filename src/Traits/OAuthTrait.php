@@ -9,16 +9,12 @@ trait OAuthTrait
 
     public function getAccessTokenKey(): ?string
     {
-        if (!$this->accessTokenKey) {
-            $this->setAccessTokenKey();
-        }
         return $this->accessTokenKey;
     }
 
     public function setAccessTokenKey(string $headerKey = null): self
     {
-        $this->accessTokenKey = $headerKey ?: self::HEADER_ACCESS_TOKEN;
-        $this->useOAuth();
+        $this->accessTokenKey = $headerKey;
         return $this;
     }
 
@@ -30,14 +26,13 @@ trait OAuthTrait
     public function setAccessTokenValue(string $headerValue): self
     {
         $this->accessTokenValue = $headerValue;
-        $this->useOAuth();
         return $this;
     }
 
     public function useOAuth(array $data = []): self
     {
-        $this->setAccessTokenKey($data['header'] ?? self::HEADER_ACCESS_TOKEN);
-        if ($data['token'] ?? false) {
+        $this->setAccessTokenKey(self::HEADER_ACCESS_TOKEN);
+        if (!empty($data['token'])) {
             $this->setAccessTokenValue($data['token']);
         }
         $this->setOptions(['headers' => [$this->getAccessTokenKey() => $this->getAccessTokenValue()]]);
