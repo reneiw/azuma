@@ -69,7 +69,7 @@ trait VerificationTrait
 
         $response = $this->getAPIServer()->request(
             'POST',
-            '/admin/oauth/access_token',
+            '/admin/oauth/access_token.json',
             $data
         );
 
