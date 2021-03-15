@@ -131,6 +131,7 @@ abstract class API
     public function setHttpServiceOptions(array $data): self
     {
         $this->httpServiceOptions = array_replace_recursive($this->httpServiceOptions, $data);
+        $this->getAPIServer()->setOptions($this->httpServiceOptions);
         return $this;
     }
 
