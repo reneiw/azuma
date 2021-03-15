@@ -43,10 +43,7 @@ abstract class API
         $stack = HandlerStack::create();
         $stack->push(
             HieiMiddleware::factory(
-                [
-                    'max_retry_attempts' => 3,
-                    'retry_on_status' => [429],
-                ]
+                $data['hiei'] ?? ['max_retry_attempts' => 3, 'retry_on_status' => [429]]
             )
         );
         $this->setHandler($stack);
@@ -131,7 +128,6 @@ abstract class API
     public function setHttpServiceOptions(array $data): self
     {
         $this->httpServiceOptions = array_replace_recursive($this->httpServiceOptions, $data);
-        $this->getAPIServer()->setOptions($this->httpServiceOptions);
         return $this;
     }
 
