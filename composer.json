@@ -1,5 +1,5 @@
 {
-    "name": "reneiw\/azuma",
+    "name": "reneiw/azuma",
     "license": "MIT",
     "authors": [
         {
@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^7.4",
+        "php": "^7.4|^8.0",
         "ext-json": "*",
         "reneiw/hiei": "^1.0"
     },
