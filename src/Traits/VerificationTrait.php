@@ -5,6 +5,7 @@ namespace Reneiw\Azuma\Traits;
 use GuzzleHttp\Psr7\Uri;
 use Reneiw\Azuma\Exceptions\AuthenticationException;
 use Reneiw\Azuma\Exceptions\ClientException;
+use Throwable;
 
 trait VerificationTrait
 {
@@ -35,10 +36,10 @@ trait VerificationTrait
 
             // Encode and hash the params (without HMAC), add the API secret, and compare to the HMAC from params
             return $hmac === hash_hmac(
-                'sha256',
-                urldecode(http_build_query($params)),
-                $this->getAPISecretKey()
-            );
+                    'sha256',
+                    urldecode(http_build_query($params)),
+                    $this->getAPISecretKey()
+                );
         }
 
         // Not valid
@@ -74,8 +75,11 @@ trait VerificationTrait
         );
 
         if ($response['errors']) {
+            if ($response['exception'] instanceof Throwable) {
+                $message = $response['exception']->getMessage();
+            }
             throw new AuthenticationException(
-                'Failed to get access token.MESSAGE=' . ((string)$response['response'] ?? '')
+                'Failed to get access token.MESSAGE=' . ($message ?? '')
             );
         } else {
             return $response['body'];
