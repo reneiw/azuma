@@ -4,7 +4,7 @@ namespace Reneiw\Azuma\Traits;
 
 trait BearerTokenTrait
 {
-    protected ?string $bearerToken;
+    protected ?string $bearerToken = null;
 
     protected function getBearerToken(): ?string
     {
@@ -13,7 +13,7 @@ trait BearerTokenTrait
 
     public function setBearerToken(string $token): self
     {
-        if (!substr($token, 0, 7) === 'Bearer ') {
+        if (strncmp($token, 'Bearer ', 7) !== 0) {
             $token = 'Bearer ' . $token;
         }
         $this->bearerToken = $token;
@@ -25,7 +25,7 @@ trait BearerTokenTrait
         if ($data['bearerToken'] ?? false) {
             $this->setBearerToken($data['bearerToken']);
         }
-        $this->setOptions(['headers' => ['Authorization' => $this->getBearerToken()]]);
+        $this->setOptions(['headers' => [self::HEADER_ACCESS_TOKEN => $this->getBearerToken()]]);
         return $this;
     }
 }

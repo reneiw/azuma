@@ -4,9 +4,9 @@ namespace Reneiw\Azuma\Contracts;
 
 interface OAuthInterface
 {
-    public function setAccessTokenKey(string $headerKey);
+    public function setAccessTokenKey(?string $headerKey = null);
 
     public function setAccessTokenValue(string $headerValue);
 
-    public function useOAuth();
+    public function useOAuth(array $data = []);
 }

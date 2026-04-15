@@ -35,11 +35,14 @@ trait VerificationTrait
             ksort($params);
 
             // Encode and hash the params (without HMAC), add the API secret, and compare to the HMAC from params
-            return $hmac === hash_hmac(
+            return hash_equals(
+                $hmac,
+                hash_hmac(
                     'sha256',
                     urldecode(http_build_query($params)),
                     $this->getAPISecretKey()
-                );
+                )
+            );
         }
 
         // Not valid
@@ -94,7 +97,7 @@ trait VerificationTrait
      * @return string
      * @throws ClientException
      */
-    public function getAuthUrl($scopes, string $redirectUri, string $mode = 'offline'): string
+    public function getAuthUrl($scopes, string $redirectUri, ?string $mode = 'offline'): string
     {
         if ($this->getApiKey() === null) {
             throw new ClientException('API key is missing');
@@ -117,7 +120,7 @@ trait VerificationTrait
             ->getBaseUri()
             ->withPath('/admin/oauth/authorize')
             ->withQuery(
-                preg_replace('/5B\d+5D/', '%5B%5D', http_build_query($query))
+                preg_replace('/%5B\d+%5D/', '%5B%5D', http_build_query($query))
             );
     }
 

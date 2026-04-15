@@ -8,5 +8,5 @@ interface BasicAuthInterface
 
     public function setPassword(string $password);
 
-    public function useBasicAuth();
+    public function useBasicAuth(array $data = []);
 }

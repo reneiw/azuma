@@ -21,6 +21,10 @@ abstract class API
         'handler' => null,
         'headers' => [],
     ];
+    public const DEFAULT_HIEI_OPTIONS = [
+        'max_retry_attempts' => 3,
+        'retry_on_status' => [429],
+    ];
 
     protected array $apiOptions = [];
     protected array $httpServiceOptions = [];
@@ -40,12 +44,13 @@ abstract class API
             throw new ClientException('client host is empty.');
         }
         $this->setHost($data['host']);
-        $stack = HandlerStack::create();
-        $stack->push(
-            HieiMiddleware::factory(
-                $data['hiei'] ?? ['max_retry_attempts' => 3, 'retry_on_status' => [429]]
-            )
-        );
+        if (!empty($data['options'])) {
+            $this->setOptions($data['options']);
+        }
+
+        $handler = $this->apiOptions['handler'] ?? null;
+        $stack = $handler instanceof HandlerStack ? $handler : HandlerStack::create($handler);
+        $stack->push(HieiMiddleware::factory($data['hiei'] ?? self::DEFAULT_HIEI_OPTIONS));
         $this->setHandler($stack);
         $client = new Client($this->getOptions());
         $this->setClient($client);
@@ -80,7 +85,9 @@ abstract class API
     /** @noinspection PhpUnused */
     public function getHandler(): ?HandlerStack
     {
-        return $this->apiOptions['handler'];
+        $handler = $this->apiOptions['handler'] ?? null;
+
+        return $handler instanceof HandlerStack ? $handler : null;
     }
 
     public function getHttpServiceOptions(): array
@@ -107,9 +114,9 @@ abstract class API
         return $this;
     }
 
-    public function setHandler(?HandlerStack $stack = null)
+    public function setHandler(?HandlerStack $stack = null): self
     {
-        $this->setOptions(['handler' => $stack]);
+        return $this->setOptions(['handler' => $stack]);
     }
 
     public function setOptions(array $data): self
@@ -131,7 +138,7 @@ abstract class API
         return $this;
     }
 
-    public function request(string $method, string $uri, array $params = null, array $headers = [], bool $sync = true)
+    public function request(string $method, string $uri, ?array $params = null, array $headers = [], bool $sync = true)
     {
         return $this->getAPIServer()->request($method, $uri, $params, $headers, $sync);
     }

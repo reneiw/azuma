@@ -12,7 +12,7 @@ trait OAuthTrait
         return $this->accessTokenKey;
     }
 
-    public function setAccessTokenKey(string $headerKey = null): self
+    public function setAccessTokenKey(?string $headerKey = null): self
     {
         $this->accessTokenKey = $headerKey;
         return $this;
